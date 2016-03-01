@@ -9,7 +9,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <akka.main>git.gaston.akka.sample.AkkaSampleMain</akka.main>
+        <akka.main>git.gaston.akka.samples.AkkaSampleMain</akka.main>
     </properties>
     <dependencies>
         <dependency>
@@ -19,25 +19,13 @@
         </dependency>        
     </dependencies>
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+        <plugins>           
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>1.2.3.RELEASE</version>
-                <configuration>
-                    <classifier>bin</classifier>
-                    <mainClass>${akka.main}</mainClass>
+                <configuration>                    
+                    <mainClass>${akka.main}</mainClass>                    
                 </configuration>
                 <executions>
                     <execution>
