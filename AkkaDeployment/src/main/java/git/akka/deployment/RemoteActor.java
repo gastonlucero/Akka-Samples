@@ -9,7 +9,7 @@ import akka.actor.UntypedActor;
 public class RemoteActor extends UntypedActor {
 
 	public RemoteActor() {
-		System.out.println("Hola soy el actor deployado remotamente por "+ getSender());
+		System.out.println("Hola soy el actor deployado remotamente ");
 	}
 
 	

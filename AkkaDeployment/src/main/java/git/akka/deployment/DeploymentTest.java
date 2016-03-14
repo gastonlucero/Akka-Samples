@@ -1,7 +1,11 @@
 package git.akka.deployment;
 
 import akka.actor.ActorSystem;
+import akka.actor.Address;
+import akka.actor.AddressFromURIString;
+import akka.actor.Deploy;
 import akka.actor.Props;
+import akka.remote.RemoteScope;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
@@ -17,17 +21,20 @@ public class DeploymentTest {
 		startRemote(3000);
 	}
 	public static void startLocal(int port){
-		Config config = ConfigFactory.load("remote.conf");
+		Config config = ConfigFactory.parseString(
+				"akka.remote.netty.tcp.port=" + port).withFallback(ConfigFactory.load("remote.conf"));
 		ActorSystem system = ActorSystem.create("remoteDeploySystem", config);
 	}
 	
 	public static void startRemote(int port){
-		Config config = ConfigFactory.load("remote.conf");
+		Config config = ConfigFactory.parseString(
+				"akka.remote.netty.tcp.port=" + port).withFallback(ConfigFactory.load("remote.conf"));
 		ActorSystem system = ActorSystem.create("remoteDeploySystem", config);
 
-//		Address addr = new Address("akka.tcp", "sys", "host", 1234);
-//		addr = AddressFromURIString.parse("akka.tcp://sys@host:1234"); // the same
-//		system.actorOf(Props.create(RemoteDeployActor.class).withDeploy(new Deploy(new RemoteScope(addr))));
 		system.actorOf(Props.create(RemoteActor.class), "remoteActor");
+		Address addr = new Address("akka.tcp", "remoteDeploySystem", "0.0.0.0", 2000);
+		system.actorOf(Props.create(RemoteActor.class).withDeploy(new Deploy(new RemoteScope(addr))));
+		Address addr2 = AddressFromURIString.parse("akka.tcp://remoteDeploySystem@0.0.0.0:2000");
+		system.actorOf(Props.create(RemoteActor.class).withDeploy(new Deploy(new RemoteScope(addr2))));
 	}
 }
